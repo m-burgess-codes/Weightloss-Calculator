@@ -1,0 +1,100 @@
+<html>
+
+<head>
+
+<title>TBFatnessCalc</title>
+
+<style>
+
+body {
+    background-color: rgb(34, 29, 29);
+}
+
+form {
+    color: rgb(255, 255, 255);
+    background-color: rgb(59, 51, 51);
+    display: inline-block;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+form input {
+  border: none;
+  background: transparent;
+  border-bottom: 1px solid #fff;
+  outline: none;
+}
+
+form button {
+  background-color: gray;
+  border: 1;
+  border-start-end-radius: 3px;
+  color: #fff;
+}
+
+</style>
+
+<script language="JavaScript">
+
+function calculateBmi() {
+var weight = document.bmiForm.weight.value
+var height = document.bmiForm.height.value
+if(weight > 0 && height > 0){
+var finalBmi = weight/(height * height) * 703;
+document.bmiForm.bmi.value = finalBmi
+if(finalBmi < 18.5){
+document.bmiForm.meaning.value = "you are the opposite of fat."
+}
+if(finalBmi > 18.5 && finalBmi < 25){
+document.bmiForm.meaning.value = "you aren't fat."
+}
+if(finalBmi > 25){
+document.bmiForm.meaning.value = "you are fat."
+}
+}
+else{
+alert("Please Fill in everything correctly")
+}
+}
+
+function calculateGoal() {
+var cWeight = document.goalWeightForm.weight1.value
+var gWeight = document.goalWeightForm.weight2.value
+var goal = document.goalWeightForm.date.value
+var today = new Date();
+var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+var daysToGoal = 
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div>
+    <form name="bmiForm">
+    Your Weight(lb): <input type="text" name="weight" size="10"><br />
+    Your Height(in): <input type="text" name="height" size="10"><br />
+    Your BMI: <input type="text" name="bmi" size="10"><br />
+    This Means: <input type="text" name="meaning" size="25"><br />
+    <input type="button" value="Calculate BMI" onClick="calculateBmi()">
+    <input type="reset" value="Reset" />
+    </form>
+</div>
+
+<div>
+    <form name="goalWeightForm">
+        Your Current Weight(lb): <input type="text" name="weight1" size="10"><br />
+        Your Goal Weight(lb): <input type="text" name="weight2" size="10"><br />
+        When Do You Want To Meet Your Goal?: <input type="date" name="height" size="10"><br />
+        Calories To Burn Per Week: <input type="text" name="caloriesWeel" size="25"><br />
+        Calories To Burn (Total): <input type="text" name="caloriesTotal" size="25"><br />
+        <input type="button" value="Calculate" onClick="calculateGoal()">
+        <input type="reset" value="Reset" />
+        </form>
+</div>
+
+</body>
+
+</html>
