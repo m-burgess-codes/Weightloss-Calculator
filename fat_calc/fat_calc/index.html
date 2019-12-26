@@ -9,25 +9,12 @@
 <style>
 
 body {
-    background-color: rgb(32, 18, 18);
-}
-
-form {
-    color: rgb(255, 255, 255);
-    background-color: rgb(59, 51, 51);
-    display: inline-block;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-form button {
-  background-color: gray;
-  border: 1;
-  border-start-end-radius: 3px;
-  color: #fff;
+    font-size: small;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #ui-datepicker-div { 
-  font-size: 10px; 
+  font-size: 10px;
   } 
 
 </style>
@@ -41,6 +28,7 @@ form button {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
         
 <script>
+  $(document).ready(function(){
         //calculates BMI, BMR, TOTAL CALS, LBS TO LOSE, AND 
         function calculateFatness() {
         var age = document.getElementById("age1").value;
@@ -53,7 +41,7 @@ form button {
         var goalBmi = goalW / (height * height) * 703;
         var finalGoalBmi = goalBmi.toFixed(2);
         var today = moment();
-        var goalD = document.getElementById("gDate").value;
+        var goalD = document.getElementById("date1").value;
         var goalDform = moment(goalD).format("MMM Do YYYY"); 
         var daysToGoal = today.diff(goalD, 'day');
         var positiveDays = Math.abs(daysToGoal);
@@ -72,10 +60,12 @@ form button {
         var bmrFemaleNum = numeral(bmrFemale).format('0,0');
         var fBmrMaleNum = numeral(fBmrMale).format('0,0');
         var fBmrFemaleNum = numeral(fBmrFemale).format('0,0');
-
+        var fBmr;
+        var bmr;
+        var TDEE;
 //------------------------------------CURRENT BMI RESULTS------------------------------------
           if (weight > 0 && height > 0) {
-          document.getElementById("myBmi").innerHTML = "<span style='color: #00D4FF;'>"+finalBmi+"</span>";
+            document.getElementById("myBmi").innerHTML = "<span style='color: #00D4FF;'>"+finalBmi+"</span>";
           }
           if (finalBmi < 18.5) {
             document.getElementById("fat").innerHTML = "<span style='color: orange;'>You are the opposite of fat, which can still be a problem.</span>"
@@ -116,6 +106,11 @@ form button {
           if (goalBmi > 45) {
           document.getElementById("futureFat").innerHTML = "<span style='color: red;'>You will need to continue your journey, because you will be ridiculously fat still.</span>";
           }
+          if (goalBmi > 45) {
+          document.getElementById("futureFat").innerHTML = "<span style='color: red;'>You will need to continue your journey, because you will be ridiculously fat still.</span>";
+          }
+
+//-----------------------------------TDEE Calc-------------------------------------------------
         
 //------------------------------------Caloric-Weight-GoalBMI------------------------------------
           document.getElementById("weightLose").innerHTML = "<span style='color: #00D4FF;'>"+toLose+"lbs</span>";
@@ -128,49 +123,84 @@ form button {
 
           document.getElementById("myGlBmi").innerHTML = "<span style='color: #00D4FF;'>"+finalGoalBmi+"</span>";
 
-          document.getElementById("bmr1").innerHTML = "<span style='color: #00D4FF;'>Male:"+bmrMaleNum+" cals per day OR Female:"+bmrFemaleNum+" cals per day.</span>";
-
           document.getElementById("fDate").innerHTML = goalDform;
-
-          document.getElementById("bmr2").innerHTML = "<span style='color: #00D4FF;'>Male:"+fBmrMaleNum+" cals per day OR Female:"+fBmrFemaleNum+" cals per day.</span>";
         
           document.getElementById("gWeight").innerHTML = "<span style='color: #00D4FF;'>"+goalW+"lbs</span>";
 
-
+//-------------------------------------------BMR--------------------------------------------------------
+        if(document.getElementById('s1') .checked) {
+            bmr = bmrMale;
+            fBmr = fBmrMale;
+            document.getElementById("bmr1").innerHTML = "<span style='color: #00D4FF;'>"+numeral(bmr).format('0,0')+" cals per day.</span>";
+            document.getElementById("bmr2").innerHTML = "<span style='color: #00D4FF;'>"+numeral(fBmr).format('0,0')+" cals per day.</span>";
+          }else if(document.getElementById('s2') .checked) {
+            bmr = bmrFemale;
+            fBmr = fBmrFemale;
+            document.getElementById("bmr1").innerHTML = "<span style='color: #00D4FF;'>"+bmr+" cals per day.</span>";
+            document.getElementById("bmr2").innerHTML = "<span style='color: #00D4FF;'>"+fBmr+" cals per day.</span>";
+          }
+        if(document.getElementById('a1') .checked) {
+            document.getElementById("totDee").innerHTML = "<span style='color: #00D4FF;'>"+(bmr * 1.2).toFixed(0)+" cals per day.</span>";
+          }else if(document.getElementById('a2') .checked) {
+            document.getElementById("totDee").innerHTML = "<span style='color: #00D4FF;'>"+(bmr * 1.375).toFixed(0)+" cals per day.</span>";
+          }else if(document.getElementById('a3') .checked) {
+            document.getElementById("totDee").innerHTML = "<span style='color: #00D4FF;'>"+(bmr * 1.55).toFixed(0)+" cals per day.</span>";
+          }else if(document.getElementById('a4') .checked) {
+            document.getElementById("totDee").innerHTML = "<span style='color: #00D4FF;'>"+(bmr * 1.725).toFixed(0)+" cals per day.</span>";
+          }else if(document.getElementById('a5') .checked) {
+            document.getElementById("totDee").innerHTML = "<span style='color: #00D4FF;'>"+(bmr * 1.9).toFixed(0)+" cals per day.</span>";
+          }
+          console.log(bmr);
         }
+
+        function delay() {
+            setTimeout(calculateFatness, 200);
+         }
 
 // attach to input with id of date1
 $('#date1').datepicker();
+// Attach click here
+$("#calculate").click(function(){
+  calculateFatness();
 
-// attach to inputs with class of date-field
-$('.date-field').datepicker();
-      
+$("input").keypress(delay);
+$("input").click(delay);
+
+});
+});
 </script>
       
       </head>
       
       <body>
       
-        <div>
+        <div style="float:left;">
           <form name="fatForm">
             <h1>Current You</h1>
+            <h4>Sex</h4>
+            <input type="radio" name="sex" id="s1" value="male" checked> Male<br />
+            <input type="radio" name="sex" id="s2" value="female"> Female<br />
+            <h4>Activity Level</h4>
+            <input type="radio" name="activity" id="a1" value="a1" checked> Sedentary (little to no exercise + work a desk job)<br />
+            <input type="radio" name="activity" id="a2" value="a2"> Lightly Active (light exercise 1-3 days / week)<br />
+            <input type="radio" name="activity" id="a3" value="a3"> Moderately Active (moderate exercise 3-5 days / week)<br />
+            <input type="radio" name="activity" id="a4" value="a4"> Very Active (heavy exercise 6-7 days / week)<br />
+            <input type="radio" name="activity" id="a5" value="a5"> Extremely Active (very heavy exercise, hard labor job, training 2x / day)<br /> <br />
             Your Age: <input type="number" id="age1" size="10"><br />
             Your Weight(lb): <input type="number" id="weight1" size="10"><br />
             Your Goal Weight(lb): <input type="number" id="weight2" size="10"><br />
             Your Height(in): <input type="number" id="height" size="10"><br />
             When Do You Want To Meet Your Goal?:<input type="text" id="date1" name="date1"/> <br/>
-            Your BMI Now: <span id="myBmi" style='color: grey;'>???</span><br />
-            Which Means: <span id="fat" style='color: grey;'>???</span><br />
+            <u>Your BMI Now</u>: <span id="myBmi" style='color: grey;'>???</span><br />
+            <u>Which Means</u>: <span id="fat" style='color: grey;'>???</span><br />
             <u>Your Basal Metabolic Rate</u>: <span id="bmr1" style='color: grey;'>???</span><br />
+            <u>Your TDEE</u>: <span id="totDee" style='color: grey;'>???</span><br />
           </form>
-        </div>
-      
-        <div>
-        <Button onclick="calculateFatness()">Calculate</Button>
-        <Button onClick="window.location.reload();">Reset</Button>
+          <Button id="calculate">Calculate</Button>
+          <Button onClick="window.location.reload();">Reset</Button>
         </div>
 
-        <div>
+        <div style="float:left;">
           <form name="futureForm">
             <h1>You On <span id="fDate"></span> </h1>
             <u>Weight</u>: <span id="gWeight" style='color: grey;'>???</span><br />
