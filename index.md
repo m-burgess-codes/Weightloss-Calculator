@@ -2,7 +2,7 @@
 
 <head>
 
-<title>TBFatnessCalc</title>
+<title>Weightloss-Calc</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css" integrity="sha256-n3ci71vDbbK59GUg1tuo+c3KO7+pnBOzt7BDmOe87s4=" crossorigin="anonymous" />
 
@@ -150,7 +150,11 @@ body {
           }else if(document.getElementById('a5') .checked) {
             document.getElementById("totDee").innerHTML = "<span style='color: #00D4FF;'>"+(bmr * 1.9).toFixed(0)+" cals per day.</span>";
           }
-          console.log(bmr);
+
+          if (CalDay > 1000) { 
+            alert("Warning, daily deficit is over 1000 calories which can be unsustainable or troublesome in your overall effort");
+          }
+
         }
 
         function delay() {
@@ -162,11 +166,10 @@ $('#date1').datepicker();
 // Attach click here
 $("#calculate").click(function(){
   calculateFatness();
+});
 
 $("input").keypress(delay);
 $("input").click(delay);
-
-});
 });
 </script>
       
