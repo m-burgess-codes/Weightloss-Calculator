@@ -35,7 +35,11 @@ body {
         var weight = document.getElementById("weight1").value;
         var goalW = document.getElementById("weight2").value;
         var toLose = weight - goalW;
-        var height = document.getElementById("height").value;
+        var feetToInches = document.getElementById("ft").value *12;
+        var inches =  document.getElementById("in").value;
+        var parsedF = parseInt(feetToInches, 10);
+        var parsedI = parseInt(inches, 10)
+        var height = parsedF + parsedI;
         var bmi = weight / (height * height) * 703;
         var finalBmi = bmi.toFixed(2);
         var goalBmi = goalW / (height * height) * 703;
@@ -63,6 +67,10 @@ body {
         var fBmr;
         var bmr;
         var TDEE;
+
+        console.log(height);
+        console.log(feetToInches);
+        console.log(inches);
 //------------------------------------CURRENT BMI RESULTS------------------------------------
           if (weight > 0 && height > 0) {
             document.getElementById("myBmi").innerHTML = "<span style='color: #00D4FF;'>"+finalBmi+"</span>";
@@ -150,26 +158,43 @@ body {
           }else if(document.getElementById('a5') .checked) {
             document.getElementById("totDee").innerHTML = "<span style='color: #00D4FF;'>"+(bmr * 1.9).toFixed(0)+" cals per day.</span>";
           }
-
-          if (CalDay > 1000) { 
-            alert("Warning, daily deficit is over 1000 calories which can be unsustainable or troublesome in your overall effort");
-          }
-
         }
 
         function delay() {
             setTimeout(calculateFatness, 200);
          }
+        function delay2() {
+          setTimeout(checkDeficit, 250);
+         }
+
+       function checkDeficit() {
+        var today = moment();
+        var weight = document.getElementById("weight1").value;
+        var goalW = document.getElementById("weight2").value;
+        var toLose = weight - goalW;
+        var goalD = document.getElementById("date1").value;
+        var goalDform = moment(goalD).format("MMM Do YYYY"); 
+        var daysToGoal = today.diff(goalD, 'day');
+        var positiveDays = Math.abs(daysToGoal);
+        var calsBurn = toLose * 3500;
+        var CalDay = calsBurn / positiveDays;
+
+        if (CalDay > 1000) { 
+            alert("Warning, daily deficit is over 1000 calories which can be unsustainable or troublesome in your overall effort");
+          }
+         }
 
 // attach to input with id of date1
-$('#date1').datepicker();
+$('#date1').datepicker({autoHide: true});
 // Attach click here
 $("#calculate").click(function(){
-  calculateFatness();
+  delay();
+  delay2();
 });
 
 $("input").keypress(delay);
-$("input").click(delay);
+$("input").click(delay
+);
 });
 </script>
       
@@ -192,7 +217,7 @@ $("input").click(delay);
             Your Age: <input type="number" id="age1" size="10"><br />
             Your Weight(lb): <input type="number" id="weight1" size="10"><br />
             Your Goal Weight(lb): <input type="number" id="weight2" size="10"><br />
-            Your Height(in): <input type="number" id="height" size="10"><br />
+            Your Height: <input type="text" id="ft" size="2">ft <input type="text" id="in" size="2">in<br />
             When Do You Want To Meet Your Goal?:<input type="text" id="date1" name="date1"/> <br/>
             <u>Your BMI Now</u>: <span id="myBmi" style='color: grey;'>???</span><br />
             <u>Which Means</u>: <span id="fat" style='color: grey;'>???</span><br />
